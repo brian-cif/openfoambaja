@@ -51,3 +51,6 @@ decomposeParDict/simpleFoam/reconstructPar
 <br>
 
 ## ENSURE MODEL IN baja.stl IN constant/triSurface/!!! BACKUP AND REPLACE MODEL AFTER EACH RUN!
+
+
+<img width="1154" height="878" alt="image" src="https://github.com/user-attachments/assets/fa3a1376-6a10-4d87-a059-4072fe3bcc0a" />
