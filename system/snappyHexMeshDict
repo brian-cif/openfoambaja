@@ -1,0 +1,117 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+|  \\    /   O peration     | Version: 13
+|   \\  /    A nd           |
+|    \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+
+castellatedMesh true;    // Enable mesh refinement and snapping
+snap            true;    // Snap mesh to surface geometry
+addLayers       false;   // Set to true later if you want prism layers (boundary layer)
+geometry
+{
+    bajaSurface // This is the name you use throughout the rest of the dict
+    {
+        type triSurfaceMesh;
+        file "baja.stl"; // You were missing this line!
+    }
+}
+
+castellatedMeshControls
+{
+    maxLocalCells 1000000;          // Max cells to add in refinement
+    maxGlobalCells 4000000;         // Max total cells allowed (prevent explosion)
+    minRefinementCells 10;          // Minimum cells to refine
+
+    nCellsBetweenLevels 3;          // Buffer cells between refinement levels
+
+    allowFreeStandingZoneFaces false;
+    features
+    (
+        // No features extraction for now; can add edges if needed for sharp edges
+    );
+
+    refinementSurfaces
+    {
+        bajaSurface
+        {
+            level (1 2);            // Min and max refinement levels near surface
+                                    // 2 = moderate, 3 = finer near surface
+        }
+    }
+
+    resolveFeatureAngle 30;          // Angle to detect sharp edges, irrelevant now
+
+    refinementRegions
+    {
+        // Can specify regions for refinement here if needed
+    }
+
+    locationInMesh (-4 0 0);          // Point inside fluid domain for mesh checking
+}
+
+snapControls
+{
+    nSmoothPatch 3;                 // Smooth mesh on patches during snapping
+    tolerance 2.0;                  // Max snapping distance (cells)
+    nSolveIter 30;                  // Number of snapping iterations
+    nRelaxIter 5;                   // Relaxation iterations for snapping
+}
+
+addLayersControls
+{
+    relativeSizes true;             // Use relative thickness for prism layers
+
+    layers
+    {
+        // Example to add prism layers near surface; currently empty
+        // "bajaSurface.*"
+        // {
+        //     nSurfaceLayers 3;
+        // }
+    }
+
+    expansionRatio 1.2;             // Growth rate for layers away from surface
+    finalLayerThickness 0.3;        // Final layer thickness as fraction of cell size
+    minThickness 0.1;               // Minimum thickness of prism layers
+    nGrow 0;                       // Growth rate on the boundary between layers
+
+    featureAngle 30;                // Angle to detect edges for layer extrusion
+    nRelaxIter 5;                  // Relax iterations for layer addition
+    nSmoothSurfaceNormals 1;       // Smooth normals for layer extrusion
+    nSmoothNormals 3;              // Smooth normals
+    nBufferCellsNoExtrude 0;       // Cells near features that are not extruded
+    nLayerIter 50;                 // Max iterations for layer addition
+}
+
+meshQualityControls
+{
+    maxNonOrtho 65;                // Maximum allowed non-orthogonality
+    maxBoundarySkewness 20;       // Max skewness near boundaries
+    maxInternalSkewness 4;        // Max skewness inside mesh
+    maxConcave 80;                // Max concavity
+    minVol 1e-13;                 // Min volume before cell is considered collapsed
+    minTetQuality 1e-9;           // Min quality of tetrahedra inside mesh
+    minArea -1;                   // Min face area, disabled
+    minTwist 0.02;                // Min twist angle
+    maxTwist 0.8;                 // Max twist angle
+    minDeterminant 0.001;         // Min determinant for cell jacobian
+    minFaceWeight 0.02;           // Min face weight
+    minVolRatio 0.01;             // Min volume ratio (compared to ideal)
+    minTriangleTwist -1;          // Min triangle twist (disabled)
+    nSmoothScale 4;               // Smoothness scale for quality checks
+    errorReduction 0.75;          // Error reduction rate
+}
+
+debug 0;
+
+mergeTolerance 1e-6;              // Tolerance for merging points close together

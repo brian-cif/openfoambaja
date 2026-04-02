@@ -1,0 +1,63 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| controlDict for Baja CFD Simulation                                        |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+
+application     simpleFoam;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         1000;
+
+deltaT          1;
+
+writeControl    timeStep;
+
+writeInterval   100;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+functions
+{
+    forces
+    {
+        type            forceCoeffs;
+        libs            ("libfieldFunctionObjects.so" "libforces.so");
+        writeControl    timeStep;
+        timeInterval    1;
+        log             yes;
+        patches         ( bajaSurface );
+        rho             rhoInf;
+        rhoInf          1.225; // Air density
+        liftDir         (0 0 1);
+	pitchAxis       (0 1 0);      // The "sideways" axis (Y)
+        magUInf         13;           // Velocity magnitude
+        lRef            1.5;          // Reference length of car
+        dragDir         (1 0 0);
+        CofR            (0 0 0);
+        magUInf         13;    // Your 33mph speed
+        lRef            1.5;   // Length of car (approx)
+        Aref            1.0;   // Frontal area (set to 1.0 for raw force)
+    }
+}
