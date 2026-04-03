@@ -4,7 +4,7 @@
 #!/bin/bash
 # Enable strict error handling
 set -eE 
-trap 'echo -e "\n❌ SCRIPT FAILED: Error on line $LINENO." >&2; echo "Command: \`$BASH_COMMAND\`" >&2' ERR
+trap 'echo -e "\n SCRIPT FAILED: Error on line $LINENO." >&2; echo "Command: \`$BASH_COMMAND\`" >&2' ERR
 
 # --- 0. LOAD OPENFOAM ENVIRONMENT ---
 echo "Loading OpenFOAM environment..."
