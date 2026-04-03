@@ -50,6 +50,10 @@ decomposeParDict/simpleFoam/reconstructPar
 
 <br>
 
+simply place STL in baja.stl and run the bash script in openfoam. built solely for WSL openfoam 13
+
+<br>
+
 ## ENSURE MODEL IN baja.stl IN constant/triSurface/!!! BACKUP AND REPLACE MODEL AFTER EACH RUN!
 
 
